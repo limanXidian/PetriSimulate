@@ -4,51 +4,49 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import petri.entity.PetriNet;
 import petri.node.Node;
 
 public class Transistion extends Node{
 
-	private ArrayList<String> precursorPlaceList;
+	private ArrayList<Place> precursorPlaceList;
 	private String name;
 	
 	/**
 	 * @return the precursorPlaceList
 	 */
-	public ArrayList<String> getPrecursorPlaceList() {
+	public ArrayList<Place> getPrecursorPlaceList() {
 		return precursorPlaceList;
 	}
 
 	public Transistion() {
-		this.precursorPlaceList = new ArrayList<String>();
+		this.precursorPlaceList = new ArrayList<Place>();
 	}
 
 	
-	public void addPrePlace(String p){
+	public void addPrePlace(Place p){
 		precursorPlaceList.add(p);
 	}
 	
-	public boolean isExecute(PetriNet pNet) {
+	public boolean isExecute() {
 		for(int i =0; i < this.precursorPlaceList.size(); i++) {
 			//System.out.println(pNet.getPlace(precursorPlaceList.get(i)).getTokenNum());
-			if(pNet.getPlace(precursorPlaceList.get(i)).getTokenNum() == 0)
+			if(precursorPlaceList.get(i).getTokenNum() == 0)
 				return false;
 		}
 		return true;
 	}
 	
-	public void execute(PetriNet pNet) {
-//		if(!isExecute(pNet)) {
-//			return;
-//		}
+	public void execute() {
+		if(!isExecute()) {
+			return;
+		}
 		System.out.println("--------------------");
-		Iterator<String> it1 = this.precursorPlaceList.iterator();
+		Iterator<Place> it1 = this.precursorPlaceList.iterator();
 		while(it1.hasNext()) {
-			String pName = it1.next();
-			System.out.println(pName+"运行前Token数为："+pNet.getPlace(pName).getTokenNum());
-			pNet.getPlace(pName).resumeToken();
-			//System.out.println(pNet.getPlace(pName));
-			System.out.println(pName+"运行后Token数为："+pNet.getPlace(pName).getTokenNum());
+			Place pName = it1.next();
+			System.out.println(pName.getName()+"运行前Token数为："+pName.getTokenNum());
+			pName.resumeToken();
+			System.out.println(pName.getName()+"运行后Token数为："+pName.getTokenNum());
 		}
 		
 		if(this.connList.size() == 1) {

@@ -100,7 +100,7 @@ public class PetriNet {
 			return;
 		}
 		PList.get(i).addConn(TList.get(j));
-		TList.get(j).addPrePlace(PList.get(i).getName());
+		TList.get(j).addPrePlace(PList.get(i));
 		//System.out.println("添加成功！");
 	}
 	
@@ -126,28 +126,28 @@ public class PetriNet {
 		}
 	}
 	
-	public void run(PetriNet pNet,int[] Tnum) {
+	public void run(int[] Tnum) {
 
 		if(Tnum.length <= 0)
 			return;
 		if(Tnum.length == 1) {
-			TList.get(Tnum[0]).execute(pNet);
-			for(int j = 1; j < pNet.getTransistionNum(); j++) {
-				TList.get(j).execute(pNet);
+			TList.get(Tnum[0]).execute();
+			for(int j = 1; j < this.getTransistionNum(); j++) {
+				TList.get(j).execute();
 			}
 		}else {
-			int[] newNum =new int[Tnum.length];
+			//int[] newNum =new int[Tnum.length];
+			ArrayList<Integer> newNum = new ArrayList<Integer>();
 			for(int i=0; i < Tnum.length; i++) {
-				int j=0;
-				if(TList.get(Tnum[i]).isExecute(pNet)) {
-					newNum[j] = Tnum[i];
-					j++;
+				if(TList.get(Tnum[i]).isExecute()) {
+					//newNum[j] = Tnum[i];
+					newNum.add(Tnum[i]);
 				}
 			}
 			Random rand = new Random();
-			TList.get(newNum[rand.nextInt(newNum.length)]).execute(pNet);
-			for(int j = 0; j < pNet.getTransistionNum(); j++) {
-				TList.get(j).execute(pNet);
+			TList.get(newNum.get(rand.nextInt(newNum.size()))).execute();
+			for(int j = 0; j < this.getTransistionNum(); j++) {
+				TList.get(j).execute();
 			}
 		}
 		
